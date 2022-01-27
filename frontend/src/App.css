@@ -1,0 +1,7 @@
+.content{
+  /* background: url(".//MyComponents/img/bg.jpg"); */
+  background-size: 100% 100%;
+  width: 100vw;
+background-color: #f0f4f7;
+  min-height: 90vh;
+}

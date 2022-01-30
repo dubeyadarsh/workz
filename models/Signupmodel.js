@@ -4,7 +4,7 @@ const SignupSchema=new mongoose.Schema({
     type:String,
     required:true
  },
- usermail:{
+ name:{
     type:String,
     required:true
  },

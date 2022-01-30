@@ -19,6 +19,7 @@ const [loginPass, setloginPass] = useState("");
 
   useEffect(() => {
     login();
+  
   });
   function login() {
 
@@ -39,6 +40,21 @@ const [loginPass, setloginPass] = useState("");
 	console.log(registerName+" "+registerMail+" "+registerPass);
 	Axios.post("/register",{registerName:registerName,registerMail:registerMail,registerPass:registerPass});
   }
+  function Signin(e){
+    e.preventDefault();
+    console.log(loginMail+" "+loginPass);
+    Axios.post("/login",{username:loginMail,password:loginPass}).then((response)=>{
+      if(response.data.isAuthenticated){
+      
+        
+        alert("U logged in succesfully");
+      }
+      else{
+        alert("Wrong login credentials ..try again ")
+      }
+    
+    });
+    }
   return (
     <div className="body1">
       <img class="img1" src={logo2} href="#" />
@@ -74,7 +90,7 @@ const [loginPass, setloginPass] = useState("");
             <input value={loginMail}  onChange={(e)=>setloginMail(e.target.value)} type="email" placeholder="Email" required />
             <input value={loginPass}  onChange={(e)=>setloginPass(e.target.value)} type="password" placeholder="Password" required />
             <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+            <button onClick={Signin}>Sign In</button>
           </form>
         </div>
         <div class="overlay-container">

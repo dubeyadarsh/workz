@@ -55,6 +55,14 @@ const [loginPass, setloginPass] = useState("");
     
     });
     }
+  function Glogin(e){
+    e.preventDefault();
+    console.log("U clicked it")
+    window.open("http://localhost:3001/auth/google","_self")
+    Axios.get("/auth/google").then((response)=>{
+   console.log("You got it");
+    });
+  }
   return (
     <div className="body1">
       <img class="img1" src={logo2} href="#" />
@@ -64,9 +72,9 @@ const [loginPass, setloginPass] = useState("");
             <h1>Create Account</h1>
             <div class="social-container">
               {/* <a href="#" class="social"><i class="fab fa-facebook-f"></i></a> */}
-              <a href="#" class="social">
-                <i class="fab fa-google-plus-g"></i>
-              </a>
+              <button  class="social">
+                <i   onClick={Glogin}  class="fab fa-google-plus-g"></i>
+              </button>
               {/* <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a> */}
             </div>
             <span>or use your email for registration</span>

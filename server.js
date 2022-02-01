@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 require("dotenv").config();
 const port = process.env.PORT || 3001;
-const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const {initializingPassport}=require("./passportConfig.js")
 app.use(session({
     secret:'keyboard cat',
@@ -19,9 +18,30 @@ app.use(session({
     saveUninitialized: true
 }))
 //********* */ Passport part authentication**************
-// initializingPassport(passport);
+initializingPassport(passport);
 app.use(passport.initialize());
 app.use(passport.session());
+
+// IS It Already authenticated ? Let's check it here -->
+function isAuthenticated(req,res,done){
+  if(req.user){
+    return done();
+
+  }
+  return false;
+}
+app.get("/isAuthenticated",isAuthenticated, async(req,res)=>{
+  
+   
+ await res.send(true);
+ 
+})
+app.post("/logout",async (req,res)=>{
+ await req.logout();
+ 
+  res.send("Logged Out");
+})
+
 
 // *********************************************************
 // Database part ***********
@@ -57,42 +77,12 @@ res.send({isAuthenticated:true});
 
 });
 
-const GOOGLE_CLIENT_ID = "506153696912-adi9c9qb2an7ut8gnapud0mr37i4jhs7.apps.googleusercontent.com"
-const GOOGLE_CLIENT_SECRET = "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"
-authUser = (request, accessToken, refreshToken, profile, done) => {
-  return done(null, profile);
-}
 
-//Use "GoogleStrategy" as the Authentication Strategy
-passport.use(new GoogleStrategy({
-  clientID:     GOOGLE_CLIENT_ID,
-  clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3001/auth/google/callback",
-  passReqToCallback   : true
-}, authUser));
-
-
-passport.serializeUser( (user, done) => { 
-  console.log(`\n--------> Serialize User:`)
-  console.log(user)
-   // The USER object is the "authenticated user" from the done() in authUser function.
-   // serializeUser() will attach this user to "req.session.passport.user.{user}", so that it is tied to the session object for each session.  
-
-  done(null, user)
-} )
-
-
-passport.deserializeUser((user, done) => {
-      console.log("\n--------- Deserialized User:")
-      console.log(user)
-      // This is the {user} that was saved in req.session.passport.user.{user} in the serializationUser()
-      // deserializeUser will attach this {user} to the "req.user.{user}", so that it can be used anywhere in the App.
-
-      done (null, user)
-}) 
 app.get('/auth/google',
-  passport.authenticate('google', { scope: [ 'email', 'profile' ]
-}));
+  passport.authenticate('google', { scope: [ 'email', 'profile' ],
+}),(req,res)=>{
+    console.log("u have been called");
+});
 app.get('/auth/google/callback', passport.authenticate( 'google'),(req,res)=>{
   console.log("Bahot Sahi beta")
 

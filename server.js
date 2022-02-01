@@ -19,6 +19,7 @@ app.use(session({
 }))
 //********* */ Passport part authentication**************
 initializingPassport(passport);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
